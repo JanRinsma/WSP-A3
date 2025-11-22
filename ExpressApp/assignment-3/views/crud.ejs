@@ -1,13 +1,110 @@
 <%- include ./partials/header.ejs %>
-<form>
+<p>To add a new grade to the schedule, fill out the form below:</p>
+<form id="form">
     <label for="course">Enter course:</label>
     <input type="text" id="course" name="course"><br>
     <label for="description">Enter description:</label>
     <input type="text" id="description" name="description"><br>
     <label for="grade">Enter grade:</label>
-    <input type="number" id="grade" name="grade"><br>
+    <input type="text" id="grade" name="grade"><br>
     <input type="submit" value="submit">
 </form>
+
+<script > 
+    // Delete function 
+    function onDelete(td) {
+            const response = confirm("Are you sure you want to delete this row?")
+            if (response) {
+                var row = td.parentElement.parentElement;
+                document.getElementById("schedule").deleteRow(row.rowIndex);
+            }    
+        }
+
+    // Edit function
+    function onEdit(td) {
+        var new_course = prompt("enter new course");
+        var new_description = prompt("enter new description");
+        var new_grade = prompt("enter new grade");
+        var old_row_index = td.parentElement.parentElement.rowIndex;
+
+        document.getElementById("schedule").deleteRow(old_row_index);
+
+        //onDelete(td);
+        var new_row = table.insertRow(old_row_index);
+        var new1 = new_row.insertCell(0);
+        var new2 = new_row.insertCell(-1);
+        var new3 = new_row.insertCell(-1);
+        new1.innerHTML = new_course;
+        new2.innerHTML = new_description;
+        new3.innerHTML = new_grade;
+        var button_del = new_row.insertCell(-1);
+        button_del.innerHTML = `<button type="button" onClick="onDelete(this)">Delete</button>`;
+        var button_edit = new_row.insertCell(-1);
+        button_edit.innerHTML = `<button type="button" onClick="onEdit(this)">Edit</button>`
+        
+        /*
+        data.forEach(element => {
+            document.getElementById(element.id).textContent = testy[count];
+            count++;
+        });
+        */
+    }
+
+    
+    // Creating table and first row
+        var table = document.createElement("table");
+        table.id = "schedule";
+        var header = table.insertRow(0);
+        header.className = "bold-underline";
+        h1 = header.insertCell(0);
+        h2 = header.insertCell(-1);
+        h3 = header.insertCell(-1);
+        h1.innerHTML = "Course";
+        h2.innerHTML = "Description";
+        h3.innerHTML = "Grade";
+        document.getElementById("form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Getting values from form
+        var course = document.getElementById("course").value;
+        var description = document.getElementById("description").value;
+        var grade = document.getElementById("grade").value;
+    
+
+        var row = table.insertRow(-1);
+        var data = [course, description, grade];
+        var count = 0;
+        data.forEach(element => {
+            var temp = row.insertCell(-1);
+            temp.innerHTML = element;
+            temp.id = count;
+            count++;
+        
+        });
+
+        
+        
+        
+
+        var button_del = row.insertCell(-1);
+        button_del.innerHTML = `<button type="button" onClick="onDelete(this)">Delete</button>`;
+        var button_edit = row.insertCell(-1);
+        button_edit.innerHTML = `<button type="button" onClick="onEdit(this)">Edit</button>`
+    
+        document.getElementById("new-table").appendChild(table);
+
+        
+    });
+    
+</script>
+
+<div id="new-table" script="">
+    
+</div>
+
+
+
+
 <%- include ./partials/footer.ejs %>
 </body>
 </html>
